@@ -1,0 +1,63 @@
+\chapter{Teoría de persistencia: JPA}
+
+\section{Breve historia de la persistencia en Java} 
+
+Desde los comienzos de la programación en Java han aparecido tecnologías que permitan el acceso y manipulación (persistencia) de datos ubicados en bases de datos relacionales. 
+Un breve repaso de las tecnologías de persistencia sería el siguiente:
+ 
+\subsection*{JDBC}
+La especificación JDBC (Java Database Conectivity) permitió la estandarización del acceso a las bases de datos. Siempre que hubiese un driver compatible JDBC para una base de datos,
+la especificación nos permite el acceso a la misma desde aplicaciones Java. El problema es que aunque JDBC es un estándar, SQL no lo es. 
+El código SQL cambia para bases de datos distintas (p.e. MySQL y Oracle tienen sintaxis JAVA ligeramente distintas).
+\subsection*{EJBs}
+Se introdujo en la primera versión de J2EE (Java 2 Enterprise Edition) como nueva solución al problema de la persistencia en forma de Entity Bean. 
+Delegaban la persistencia al contenedor aunque con carencias en cuanto a portabilidad (configuración XML ad hoc en los despliegues para proveedores específicos), 
+coste de red elevado por el acceso RMI a los beans, mapeo insuficiente de las relaciones entre Entity Beans (foreign keys), etc,\ldots
+\subsection*{JDO}
+Se trató de un esfuerzo independiente por dar solución al problema de la persistencia. 
+Inicialmente requería bases de datos orientadas a objetos aunque posteriormente se amplió a las bases de datos relacionales. 
+Requiere de un proceso de \emph{enhancement} del byte code generado por el compilador java que añade datos para la gestión de la persistencia  en un proceso posterior a la compilación. 
+También define un lenguaje de consulta orientado a objetos. JDO alcanzó el status de extensión JDK aunque nunca el status de estándar Java.
+\subsection*{JPA}
+JPA es el estándar de persistencia desarrollado para la plataforma J2EE mediante el estándar EJB3. A diferencia de JDO, JPA es un estándar Java (JPA 1.0 JSR220 y JPA 2.0 JSR317) 
+existiendo una serie de implantaciones tanto comerciales como libres de dicho estándar.
+JPA permite mapear los objetos y relaciones entre los mismos a tablas relacionales, permitiendo utilizar POJOs (Plain Old Java Objects) 
+para mantener las ventajas de la orientación a objetos en el acceso a la base de datos.
+\subsection*{JPA2}
+
+\section{Definiciones}
+\subsection*{ManagedEntity}
+Entidad gestionada por un EntityManager. 
+Se trata de todas las clases que se han declarado como entidades.
+\subsection*{EntityManagerFactory}
+Objeto que se utiliza para interactuar con la base de datos definida en una unidad 
+de persistencia. Normalmente se puede identificar con un DataSource. 
+Es la encargada de crear los EntityManagers.
+\subsection*{EntityManager}
+Gestor de entidades persistentes. Recupera, actualiza y mantiene sincronizados 
+los ManagedEntities con la base de datos. 
+\subsection*{PersistenceUnit} 
+Elemento de agrupación lógica de entidades persistentes que deben de ser tratadas 
+de forma igual. Incluye:
+\begin{itemize}
+\item
+Un EntityManagerFactory y todos sus EntityManagers junto con su información de configuración.
+\item
+El conjunto de clases gestionadas incluidas en la unidad de persistencia gestionadas por los EntityManagers del EntityManagerFactory.
+\item
+Metadatos de mapeo que especifica como se mapean las clases en la base de datos.
+\end{itemize}
+
+\section{Configuración de la persistencia}
+La configuración de la persistencia se realiza mediante el fichero \emph{persistence.xml}.
+En el fichero de configuración se especifican el motor de persistencia que se va a utilizar,
+ las entidades que se consideran persistentes, así como diferentes opciones de configuración
+ (logs, weaving, \dots).
+
+\section{Modelado de entidades y sus relaciones}
+
+\subsection{XXX}
+
+\section{Consultas}
+
+\section{Consultas avanzadas. Criteria queries.}

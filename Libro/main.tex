@@ -1,0 +1,129 @@
+\documentclass[a4paper,12pt,spanish,oneside]{book}
+\special{papersize=210mm,297mm} 
+\usepackage{amsmath}
+\usepackage{amssymb} 
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[spanish]{babel}
+\usepackage{lipsum}
+\makeatletter
+\renewcommand\lips@dolipsum{%
+  \ifnum\value{lips@count}<\lips@max\relax
+    \addtocounter{lips@count}{1}%
+    \csname lipsum@\romannumeral\c@lips@count\endcsname
+    \lips@dolipsum
+  \fi
+}
+\makeatother
+
+\selectlanguage{spanish}
+\usepackage[latin1]{inputenc}
+
+\usepackage{listings}
+\usepackage{courier}
+\usepackage{xcolor}
+
+\usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+
+\definecolor{lightblue}{RGB}{213,241,250}
+\definecolor{javastrings}{rgb}{0.6,0,0} % for strings
+\definecolor{javacomments}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javakeywords}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadoc}{rgb}{0.25,0.35,0.75} % javadoc
+\lstset{
+		 language=Java,
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{javakeywords}\bfseries,
+		 stringstyle=\color{javastrings},
+		 commentstyle=\color{javacomments},
+		 morecomment=[s][\color{javadoc}]{/**}{*/},
+    	 frame=b,         
+ %        keywordstyle=[1]\textbf,    % Stil der Keywords
+ %        keywordstyle=[2]\textbf,    %
+ %        keywordstyle=[3]\textbf,    %
+ %        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+ % 		  stringstyle=\color{white}\ttfamily, % Farbe der String
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         backgroundcolor=\color{lightblue},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?        
+ }
+ \lstloadlanguages{% Check Dokumentation for further languages ...
+         %[Visual]Basic
+         %Pascal
+         %C
+         %C++
+         %XML
+         %HTML
+         Java
+ }
+ %\DeclareCaptionFont{blue}{\color{blue}} 
+
+%\captionsetup[lstlisting]{singlelinecheck=false, labelfont={blue}, textfont={blue}}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+\renewcommand{\lstlistlistingname}{Índice de listados}
+
+\renewcommand{\rmdefault}{ptm}
+\textwidth 6.0in
+\parskip 0.25cm
+\parindent 0.0in
+
+\begin{document}
+ 
+\include{titulo/titulo}
+  
+
+\frontmatter
+
+\mainmatter
+\tableofcontents
+\include{presentacion/presentacion}  
+\include{cap01/cap01} 
+\include{cap02/cap02} 
+\include{cap03/cap03} 
+\include{cap04/cap04}
+\include{cap05/cap05}
+\include{cap06/cap06}  
+\include{cap07/cap07}  
+\include{cap08/cap08} 
+\include{cap09/cap09}
+\include{cap10/cap10}  
+
+\appendix
+\clearpage
+\include{apenA/apenA}
+\include{apenB/apenB}
+\clearpage
+
+\backmatter 
+\include{glosario}
+\include{notacion}  
+
+\bibliographystyle{amsalpha}  
+\bibliography{refs} 
+\cleardoublepage 
+\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
+\listoftables
+\listoffigures
+\lstlistoflistings 
+\printindex 
+
+\end{document}
+ 
