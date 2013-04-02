@@ -1,53 +1,29 @@
 package practica1.tests;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import practica1.modelo.Cliente;
-import practica1.modelo.Departamento;
-import practica1.modelo.Empleado;
-import practica1.modelo.Empresa;
-import practica1.modelo.Estado;
-import practica1.modelo.Proyecto;
-import practica1.servicios.Servicios;
-
 public class TestBase {
 
-	private static EntityManagerFactory emf = null;
-	protected static Connection jdbcConn;
-
-	protected boolean transaccional = true;
+	protected static EntityManagerFactory emf = null;
 
 	@BeforeClass
 	public static void inicioPruebas() throws SQLException {
 		emf = Persistence.createEntityManagerFactory("practica1");
-		// jdbcConn =
-		// DriverManager.getConnection("jdbc:derby:memory:test-jpa;create=true");
-		jdbcConn = DriverManager
-				.getConnection("jdbc:derby://localhost:1527/practica1");
-		Servicios.setEntityManagerFactory(emf);
-		// populate();
 	}
 
 	@AfterClass
 	public static void finPruebas() {
 		if (emf != null) {
 			emf.close();
-			Servicios.setEntityManagerFactory(null);
 		}
 	}
-
+/*
 	protected static void borrarTodo() {
 		final EntityManager entityManager = emf.createEntityManager();
 		entityManager.getTransaction().begin();
@@ -93,88 +69,47 @@ public class TestBase {
 		try {
 
 			Empleado[] empleados = new Empleado[] {
-					new Empleado("00000000X", "PERICO", "DE LOS PALOTES",
-							"perico@gmail.com"),
-					new Empleado("00000001X", "LUIS", "MUNGEZ",
-							"lminguez@gmail.com"),
-					new Empleado("00000002X", "ROSA", "APEROS VALE",
-							"rosaap@gmail.com"),
-					new Empleado("00000003X", "MARIA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000004X", "JESUS", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000005X", "RAQUEL", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000006X", "JULIO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000007X", "ALFREDO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000008X", "MIGUEL", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000009X", "SARA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000010X", "LORETO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000011X", "LAURA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000012X", "ANGEL", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000013X", "CRISTINA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000014X", "SOLEDAD", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000015X", "JORGE", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000016X", "JAVIER", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000017X", "ALBERTO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000018X", "RICARDO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000019X", "MARGARITA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000020X", "FULGENCIO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000021X", "DAVID", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000022X", "LAURA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000023X", "VERONICA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000024X", "RAFAEL", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000025X", "PEDRO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000026X", "SANDRA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000027X", "MONICA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000028X", "Mª LUISA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000029X", "ASUNCION", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000030X", "RODRIGO", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000031X", "JUAN", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000032X", "CARLOS", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000033X", "ROSA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000034X", "NURIA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000035X", "MIGUEL", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000036X", "LUIS", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000037X", "NEREA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000038X", "NOELIA", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000039X", "JULIAN", "RUN RUN",
-							"runrunm@gmail.com"),
-					new Empleado("00000040X", "ANDRES", "POCO CURRO",
-							"andpoc@gmail.com") };
+					new Empleado("00000000X", "PERICO", "DE LOS PALOTES","perico@gmail.com"),
+					new Empleado("00000001X", "LUIS", "MUNGEZ","lminguez@gmail.com"),
+					new Empleado("00000002X", "ROSA", "APEROS VALE","rosaap@gmail.com"),
+					new Empleado("00000003X", "MARIA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000004X", "JESUS", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000005X", "RAQUEL", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000006X", "JULIO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000007X", "ALFREDO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000008X", "MIGUEL", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000009X", "SARA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000010X", "LORETO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000011X", "LAURA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000012X", "ANGEL", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000013X", "CRISTINA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000014X", "SOLEDAD", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000015X", "JORGE", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000016X", "JAVIER", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000017X", "ALBERTO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000018X", "RICARDO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000019X", "MARGARITA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000020X", "FULGENCIO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000021X", "DAVID", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000022X", "LAURA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000023X", "VERONICA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000024X", "RAFAEL", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000025X", "PEDRO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000026X", "SANDRA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000027X", "MONICA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000028X", "Mª LUISA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000029X", "ASUNCION", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000030X", "RODRIGO", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000031X", "JUAN", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000032X", "CARLOS", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000033X", "ROSA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000034X", "NURIA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000035X", "MIGUEL", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000036X", "LUIS", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000037X", "NEREA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000038X", "NOELIA", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000039X", "JULIAN", "RUN RUN","runrunm@gmail.com"),
+					new Empleado("00000040X", "ANDRES", "POCO CURRO","andpoc@gmail.com") };
 
 			Empresa[] empresas = new Empresa[] {
 					new Empresa("POCOSA S.A.", "93943959H", new Date()),
@@ -270,4 +205,5 @@ public class TestBase {
 			Servicios.commitTransaction();
 		}
 	}
+	*/
 }

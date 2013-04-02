@@ -1,495 +1,324 @@
-\section{Expression Language (EL)}
+\chapter[Apéndice B]{Expression Language [EL]}
 
-{\selectlanguage{english}\bfseries
-\foreignlanguage{spanish}{Intro}\foreignlanguage{english}{duction}}
+\section{Introduction}
 
-\foreignlanguage{english}{\textit{JavaServer}}\foreignlanguage{english}{
-}\foreignlanguage{english}{\textit{Faces}}\foreignlanguage{english}{
-provides an expression language
-(}\foreignlanguage{english}{\textit{JSF}}\foreignlanguage{english}{ EL)
-that is used in web application pages to access the JavaBeans
-components in the page
-}\foreignlanguage{english}{\textit{bean}}\foreignlanguage{english}{ and
-in other beans associated with the web application, such as the session
-}\foreignlanguage{english}{\textit{bean}}\foreignlanguage{english}{ and
-the application
-}\foreignlanguage{english}{\textit{bean}}\foreignlanguage{english}{. }
+\textit{JavaServer} \textit{Faces} provides an expression language
+(\textit{JSF} EL) that is used in web application pages to access the
+JavaBeans components in the page \textit{bean} and in other beans
+associated with the web application, such as the session \textit{bean}
+and the application \textit{bean}. 
 
-{\selectlanguage{english}\bfseries
-\foreignlanguage{english}{\textit{JavaServer}}\foreignlanguage{english}{
-}\foreignlanguage{english}{\textit{Faces}}\foreignlanguage{english}{ EL
-Expression Syntax}}
+\section{\textit{JavaServer Faces} EL Expression Syntax}
 
-\foreignlanguage{english}{\textit{JSF}}\foreignlanguage{english}{ EL can
-be used to bind JavaBeans to component properties to simplify how the
-components access data from various sources.
-}\foreignlanguage{english}{\textit{JSF}}\foreignlanguage{english}{ EL
-expressions use the syntax
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\#\{expr\};}}\foreignlanguage{english}{
-}
+\textit{JSF} EL can be used to bind JavaBeans to component properties to
+simplify how the components access data from various sources.
+\textit{JSF} EL expressions use the syntax
+\emph{\#\{expr\};} 
 
-\foreignlanguage{english}{The syntax of a value binding expression is
-identical to the syntax of an expression language expression defined in
-the
-}\foreignlanguage{english}{\textit{JavaServer}}\foreignlanguage{english}{
+The syntax of a value binding expression is identical to the syntax of
+an expression language expression defined in the \textit{JavaServer}
 Pages Specification (version 2.0), sections 2.3 through 2.9, with the
-following exceptions:}
+following exceptions:
 
-\liststyleWWNumxviii
 \begin{itemize}
-\item \foreignlanguage{english}{The expression delimiters for a value
-binding expression are
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\#\{}}\foreignlanguage{english}{
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\}}}\foreignlanguage{english}{
+\item The expression delimiters for a value binding expression are
+\emph{\#\{} and \emph{\}}
 instead\newline
-of
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\$\{}}\foreignlanguage{english}{
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\}}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{Value binding expressions do not support
-JSP expression language functions. }
+of \emph{\$\{} and \emph{\}}. 
+\item Value binding expressions do not support JSP expression language
+functions. 
 \end{itemize}
-\foreignlanguage{english}{In addition to the differences in delimiters,
-the two expression types have the following semantic differences:}
+In addition to the differences in delimiters, the two expression types
+have the following semantic differences:
 
-\liststyleWWNumxvii
 \begin{itemize}
-\item \foreignlanguage{english}{During
-}\foreignlanguage{english}{\textit{render}}\foreignlanguage{english}{ing,
-value binding expressions are evaluated by the
-}\foreignlanguage{english}{\textit{JavaServer}}\foreignlanguage{english}{
-}\foreignlanguage{english}{\textit{Faces}}\foreignlanguage{english}{
-implementation (via calls to the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{getValue}}\foreignlanguage{english}{
-method) rather than by the compiled code for a page. }
-\item \foreignlanguage{english}{Value binding expressions can be
-evaluated programmatically, even when a page is not present. }
-\item \foreignlanguage{english}{Value binding expression evaluation
-leverages the facilities of the configured
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{VariableResolver}}\foreignlanguage{english}{
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{PropertyResolver}}\foreignlanguage{english}{
-objects available through the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{Application}}\foreignlanguage{english}{
-object for the current web application, for which applications can
-provide plug-in replacement classes that provide additional
-capabilities. }
-\item \foreignlanguage{english}{If a value binding expression is used
-for the value property of an
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{EditableValueHolder}}\foreignlanguage{english}{
-component (any input field component), the expression is used to modify
-the referenced value rather than to retrieve it during the Update Model
-Values phase of the
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-processing lifecycle. \newline
-}\textstylespv{\foreignlanguage{english}{~}}
+\item During \textit{render}ing, value binding expressions are evaluated
+by the \textit{JavaServer} \textit{Faces} implementation (via calls to
+the \emph{getValue} method) rather than by the
+compiled code for a page. 
+\item Value binding expressions can be evaluated programmatically, even
+when a page is not present. 
+\item Value binding expression evaluation leverages the facilities of
+the configured \emph{VariableResolver} and
+\emph{PropertyResolver} objects available through
+the \emph{Application} object for the current web
+application, for which applications can provide plug-in replacement
+classes that provide additional capabilities. 
+\item If a value binding expression is used for the value property of an
+\emph{EditableValueHolder} component (any input
+field component), the expression is used to modify the referenced value
+rather than to retrieve it during the Update Model Values phase of the
+\textit{request} processing lifecycle. \newline
 \end{itemize}
-\foreignlanguage{english}{Examples of valid value binding expressions
-include: }
+Examples of valid value binding expressions include: 
 
-\foreignlanguage{english}{\ \ \ \#\{Page1.name\}}
+\ \ \ \#\{Page1.name\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo.bar\}}
+\ \ \ \#\{Foo.bar\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo[bar]\}}
+\ \ \ \#\{Foo[bar]\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo[{\textquotedblleft}bar{\textquotedblright}]\}}
+\ \ \ \#\{Foo[bar]\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo[3]\}}
+\ \ \ \#\{Foo[3]\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo[3].bar\}}
+\ \ \ \#\{Foo[3].bar\}
 
-\foreignlanguage{english}{\ \ \ \#\{Foo.bar[3]\}}
+\ \ \ \#\{Foo.bar[3]\}
 
-\foreignlanguage{english}{\ \ \ \#\{Customer.status ==
-{\textquoteleft}VIP{\textquoteright}\}}
+\ \ \ \#\{Customer.status == VIP\}
 
-\foreignlanguage{english}{\ \ \ \#\{(Page1.City.farenheitTemp - 32) * 5
-/ 9\}}
+\ \ \ \#\{(Page1.City.farenheitTemp - 32) * 5 / 9\}
 
-\foreignlanguage{english}{\ \ \ Reporting Period: \#\{Report.fromDate\}
-to \#\{Report.toDate\}}
+\ \ \ Reporting Period: \#\{Report.fromDate\} to \#\{Report.toDate\}
 
-\foreignlanguage{english}{For value binding expressions where the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{setValue}}\foreignlanguage{english}{
-method is going to be called (for example, for
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{text}}\foreignlanguage{english}{
-property bindings for input fields during Update Model Values), the
-syntax of a value binding expression is limited to one of the following
-forms, where
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{expr-a}}\foreignlanguage{english}{
-is a general expression that evaluates to some object, and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-b}}\foreignlanguage{english}{
-is an identifier:}
+For value binding expressions where the
+\emph{setValue} method is going to be called (for
+example, for \emph{text} property bindings for input
+fields during Update Model Values), the syntax of a value binding
+expression is limited to one of the following forms, where
+\emph{expr-a} is a general expression that evaluates
+to some object, and \emph{value-b} is an identifier:
 
-\foreignlanguage{english}{\ \ \ \#\{expr-a.value-b\}}
+\ \ \ \#\{expr-a.value-b\}
 
-\foreignlanguage{english}{\ \ \ \#\{expr-a[value-b]]}
+\ \ \ \#\{expr-a[value-b]]
 
-\foreignlanguage{english}{\ \ \ \#\{value-b\}}
+\ \ \ \#\{value-b\}
 
-{\selectlanguage{english}\bfseries
-\foreignlanguage{english}{Get Value Semantics}}
+\section{\bfseries Get Value Semantics}
 
-\foreignlanguage{english}{When the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{getValue}}\foreignlanguage{english}{
-method of a
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ValueBinding}}\foreignlanguage{english}{
-instance is called (for example, when an expression on a JSP tag
-attribute is being evaluated during the
-}\foreignlanguage{english}{\textit{render}}\foreignlanguage{english}{ing
-of the page), and the expression is evaluated, and the result of that
-evaluation is returned, evaluation takes as follows:}
+When the \emph{getValue} method of a
+\emph{ValueBinding} instance is called (for example,
+when an expression on a JSP tag attribute is being evaluated during the
+\textit{render}ing of the page), and the expression is evaluated, and
+the result of that evaluation is returned, evaluation takes as follows:
 
-\liststyleWWNumxvi
 \begin{itemize}
-\item \foreignlanguage{english}{The expression language unifies the
-treatment of the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{.}}\foreignlanguage{english}{
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{[]}}\foreignlanguage{english}{
-operators.
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{expr-a.expr-b}}\foreignlanguage{english}{
-is equivalent to
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{a[{\textquotedbl}expr-b{\textquotedbl}]}}\foreignlanguage{english}{;
-that is, the expression
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{expr-b}}\foreignlanguage{english}{
-is used to construct a literal whose value is the identifier, and then
-the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{[]}}\foreignlanguage{english}{
-operator is used with that value. }
-\item \foreignlanguage{english}{The left-most identifier in an
-expression is evaluated by the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{VariableResolver}}\foreignlanguage{english}{
-instance that is acquired from the Application instance for this web
-application. If the value on the left side of the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{.}}\foreignlanguage{english}{
-or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{[]}}\foreignlanguage{english}{
-operator is a
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{RowSet}}\foreignlanguage{english}{,
-the object on the right side is treated as a column name. See the next
-section for a more complete evaluation description of these operators.
-}
-\item \foreignlanguage{english}{Each occurrence of the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{.}}\foreignlanguage{english}{
-or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{[...]}}\foreignlanguage{english}{
-operators in an expression is evaluated by the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{PropertyResolver
-}}\foreignlanguage{english}{instance that is acquired from the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{Application}}\foreignlanguage{english}{
-instance for this web application. }
-\item \foreignlanguage{english}{Properties of variables are accessed by
-using the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{.}}\foreignlanguage{english}{
-operator and can be nested arbitrarily. }
+\item The expression language unifies the treatment of the
+\emph{.} and \emph{[]} operators.
+\emph{expr-a.expr-b} is equivalent to
+\emph{a[expr-b]}; that
+is, the expression \emph{expr-b} is used to
+construct a literal whose value is the identifier, and then the
+\emph{[]} operator is used with that value. 
+\item The left-most identifier in an expression is evaluated by the
+\emph{VariableResolver} instance that is acquired
+from the Application instance for this web application. If the value on
+the left side of the \emph{.} or
+\emph{[]} operator is a
+\emph{RowSet}, the object on the right side is
+treated as a column name. See the next section for a more complete
+evaluation description of these operators. 
+\item Each occurrence of the \emph{.} or
+\emph{[...]} operators in an expression is evaluated
+by the \emph{PropertyResolver }instance that is
+acquired from the \emph{Application} instance for
+this web application. 
+\item Properties of variables are accessed by using the
+\emph{.} operator and can be nested arbitrarily. 
 \end{itemize}
-{\selectlanguage{english}\bfseries
-\foreignlanguage{english}{Set Value Semantics}}
 
-\foreignlanguage{english}{When the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{setValue}}\foreignlanguage{english}{
-method of a
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ValueBinding}}\foreignlanguage{english}{
-is called (for example, for
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{text}}\foreignlanguage{english}{
-property bindings for input fields during Update Model Values), the
-syntax of the value binding restriction is restricted as described in
-the previous section. The implementation must perform the following
-processing to evaluate an expression of the form
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\#\{expra.value-b\}}}\foreignlanguage{english}{
-or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\#\{expr-a[value-b]\}}}\foreignlanguage{english}{:}
+\section{\bfseries Set Value Semantics}
 
-\liststyleWWNumx
-\begin{itemize}
-\item \foreignlanguage{english}{Evaluate
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{expr-a}}\foreignlanguage{english}{
-into
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{
-is null, throw
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{PropertyNotFoundException}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-b}}\foreignlanguage{english}{
-is null, throw
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{PropertyNotFoundException}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{
-is a Map, call
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a.put(value-b,
-new-value)}}\foreignlanguage{english}{. }
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{
-is a
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{List}}\foreignlanguage{english}{
-or an array: }
+When the \emph{setValue} method of a
+\emph{ValueBinding} is called (for example, for
+\emph{text} property bindings for input fields
+during Update Model Values), the syntax of the value binding
+restriction is restricted as described in the previous section. The
+implementation must perform the following processing to evaluate an
+expression of the form \emph{\#\{expra.value-b\}} or
+\emph{\#\{expr-a[value-b]\}}:
 
 \begin{itemize}
-\item \foreignlanguage{english}{Coerce
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-b}}\foreignlanguage{english}{
-to
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{int}}\foreignlanguage{english}{,
-throwing
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ReferenceSyntaxException}}\foreignlanguage{english}{
-on an error. }
-\item \foreignlanguage{english}{Attempt to execute
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a.set(value-b,
-new-value)}}\foreignlanguage{english}{ or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{Array.set(value-b,
-new-value)}}\foreignlanguage{english}{ as appropriate. }
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{IndexOutOfBoundsException
-}}\foreignlanguage{english}{or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ArrayIndexOutOfBoundsException}}\foreignlanguage{english}{
-is thrown, throw
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{PropertyNotFoundException}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{If a different exception was thrown,
-throw
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{EvaluationException}}\foreignlanguage{english}{.
-\newline
-}\textstylespv{\foreignlanguage{english}{~}}
+\item Evaluate \emph{expr-a} into
+\emph{value-a}. 
+\item If \emph{value-a} is null, throw
+\emph{PropertyNotFoundException}. 
+\item If \emph{value-b} is null, throw
+\emph{PropertyNotFoundException}. 
+\item If \emph{value-a} is a Map, call
+\emph{value-a.put(value-b, new-value)}. 
+\item If \emph{value-a} is a
+\emph{List} or an array: 
+
+\begin{itemize}
+\item Coerce \emph{value-b} to
+\emph{int}, throwing
+\emph{ReferenceSyntaxException} on an error. 
+\item Attempt to execute \emph{value-a.set(value-b,
+new-value)} or \emph{Array.set(value-b, new-value)}
+as appropriate. 
+\item If \emph{IndexOutOfBoundsException }or
+\emph{ArrayIndexOutOfBoundsException} is thrown,
+throw \emph{PropertyNotFoundException}. 
+\item If a different exception was thrown, throw
+\emph{EvaluationException}. \newline
 \end{itemize}
-\item \foreignlanguage{english}{Otherwise
-(}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{
-is a JavaBeans object): }
+\item Otherwise (\emph{value-a} is a JavaBeans
+object): 
 
 \begin{itemize}
-\item \foreignlanguage{english}{Coerce
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-b}}\foreignlanguage{english}{
-to
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{String}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{If
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-b}}\foreignlanguage{english}{
-is a writeable property of
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{value-a}}\foreignlanguage{english}{
-(as per the JavaBeans Specification), call the setter method (passing
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{new-value}}\foreignlanguage{english}{).
-}Throw \textstyleHTMLTypewriter{ReferenceSyntaxException }if an
+\item Coerce \emph{value-b} to
+\emph{String}. 
+\item If \emph{value-b} is a writeable property of
+\emph{value-a} (as per the JavaBeans Specification),
+call the setter method (passing \emph{new-value}).
+Throw \emph{ReferenceSyntaxException }if an
 exception is thrown. 
 \item Otherwise, throw
-\textstyleHTMLTypewriter{PropertyNotFoundException}. \newline
-\textstylespv{~}
+\emph{PropertyNotFoundException}. \newline
 \end{itemize}
 \end{itemize}
-\foreignlanguage{english}{If the entire expression consists of a single
-identifier, the following rules apply:}
+If the entire expression consists of a single identifier, the following
+rules apply:
 
-\liststyleWWNumxv
 \begin{itemize}
-\item \foreignlanguage{english}{If the identifier matches the name of
-one of the implicit objects described below,\newline
-throw
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ReferenceSyntaxException}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{Otherwise, if the identifier matches the
-key of an attribute in
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-scope,\newline
+\item If the identifier matches the name of one of the implicit objects
+described below,\newline
+throw \emph{ReferenceSyntaxException}. 
+\item Otherwise, if the identifier matches the key of an attribute in
+\textit{request} scope,\newline
 session scope, or application scope, the corresponding attribute value
 will be\newline
-replaced by
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{new-value}}\foreignlanguage{english}{.
-}
-\item \foreignlanguage{english}{Otherwise, a new
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-scope attribute will be created, whose key is the\newline
-identifier and whose value is
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{new-value}}\foreignlanguage{english}{.
+replaced by \emph{new-value}. 
+\item Otherwise, a new \textit{request} scope attribute will be created,
+whose key is the\newline
+identifier and whose value is \emph{new-value}.
 \newline
-}\textstylespv{\foreignlanguage{english}{~}}
 \end{itemize}
-{\selectlanguage{english}\bfseries
-\foreignlanguage{english}{Implicit Objects}\foreignlanguage{english}{ }}
+\section{\bfseries Implicit Objects }
 
-\foreignlanguage{english}{The expression language defines a set of
-implicit objects: }
+The expression language defines a set of implicit objects: 
 
-\liststyleWWNumxi
+\begin{itemize}
+\item \emph{\textit{FacesContext}} - The
+\textit{FacesContext} instance for the current \textit{request}. 
+\item \emph{param} - Maps a \textit{request}
+parameter name to a single value. 
+\item \emph{paramValues} - Maps a \textit{request}
+parameter name to an array of values. 
+\item \emph{header} - Maps a \textit{request} header
+name to a single value. 
+\item \emph{headerValues} - Maps a \textit{request}
+header name to an array of values. 
+\item \emph{cookie} - Maps a cookie name to a single
+cookie. 
+\item \emph{initParam} - Maps a context
+initialization parameter name to a single value. \newline
+\end{itemize}
+Objects that allow access to various scoped variables:
+
 \begin{itemize}
 \item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{\textit{FacesContext}}}\foreignlanguage{english}{
-- The
-}\foreignlanguage{english}{\textit{FacesContext}}\foreignlanguage{english}{
-instance for the current
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{.
-}
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{param}}\foreignlanguage{english}{
-- Maps a
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-parameter name to a single value. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{paramValues}}\foreignlanguage{english}{
-- Maps a
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-parameter name to an array of values. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{header}}\foreignlanguage{english}{
-- Maps a
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-header name to a single value. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{headerValues}}\foreignlanguage{english}{
-- Maps a
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{
-header name to an array of values. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{cookie}}\foreignlanguage{english}{
-- Maps a cookie name to a single cookie. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{initParam}}\foreignlanguage{english}{
-- Maps a context initialization parameter name to a single value.
-\newline
-}\textstylespv{\foreignlanguage{english}{~}}
+\emph{\textit{request}}\emph{Scope}
+- Maps \textit{request}{}-scoped variable names to their values. 
+\item \emph{sessionScope} - Maps session-scoped
+variable names to their values. 
+\item \emph{applicationScope} - Maps
+application-scoped variable names to their values. 
 \end{itemize}
-\foreignlanguage{english}{Objects that allow access to various scoped
-variables:}
+When an expression references one of these objects by name, the
+appropriate object is returned. An implicit object takes precedence
+over an attribute that has the same name. For example,
+\emph{\#\{}\emph{\textit{FacesContext}}\emph{\}}
+returns the \emph{\textit{FacesContext}} object,
+even if there is an existing
+\emph{\textit{FacesContext}} attribute containing
+some other value.
 
-\liststyleWWNumxii
+\section{\bfseries Literals }
+
+The expression language defines the following literals: 
+
 \begin{itemize}
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{\textit{request}}}\textstyleHTMLTypewriter{\foreignlanguage{english}{Scope}}\foreignlanguage{english}{
-- Maps
-}\foreignlanguage{english}{\textit{request}}\foreignlanguage{english}{{}-scoped
-variable names to their values. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{sessionScope}}\foreignlanguage{english}{
-- Maps session-scoped variable names to their values. }
-\item
-\textstyleHTMLTypewriter{\foreignlanguage{english}{applicationScope}}\foreignlanguage{english}{
-- Maps application-scoped variable names to their values. }
-\end{itemize}
-\foreignlanguage{english}{When an expression references one of these
-objects by name, the appropriate object is returned. An implicit object
-takes precedence over an attribute that has the same name. For example,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\#\{}}\textstyleHTMLTypewriter{\foreignlanguage{english}{\textit{FacesContext}}}\textstyleHTMLTypewriter{\foreignlanguage{english}{\}}}\foreignlanguage{english}{
-returns the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\textit{FacesContext}}}\foreignlanguage{english}{
-object, even if there is an existing
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\textit{FacesContext}}}\foreignlanguage{english}{
-attribute containing some other value.}
-
-{\selectlanguage{english}\bfseries
-\foreignlanguage{english}{Literals}\foreignlanguage{english}{ }}
-
-\foreignlanguage{english}{The expression language defines the following
-literals: }
-
-\liststyleWWNumxiii
-\begin{itemize}
-\item Boolean: \textstyleHTMLTypewriter{true} and
-\textstyleHTMLTypewriter{false} 
+\item Boolean: \emph{true} and
+\emph{false} 
 \item Integer: as in Java 
-\item \foreignlanguage{english}{Floating point: as in Java }
-\item \foreignlanguage{english}{String: with single and double quotes;
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textquotedbl}}}\foreignlanguage{english}{
-is escaped as
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textbackslash}{\textquotedbl}}}\foreignlanguage{english}{,
-{\textquotesingle}}\textstyleHTMLTypewriter{\foreignlanguage{english}{
-}}\foreignlanguage{english}{is escaped as
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textbackslash}}}\foreignlanguage{english}{{\textquotesingle},
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textbackslash}}}\foreignlanguage{english}{
-is escaped as
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textbackslash}{\textbackslash}}}\foreignlanguage{english}{.
-}
-\item Null: \textstyleHTMLTypewriter{null}
+\item Floating point: as in Java 
+\item String: with single and double quotes;
+\emph{} is escaped as
+\emph{{\textbackslash}},
+\emph{ }is escaped as
+\emph{{\textbackslash}}, and
+\emph{{\textbackslash}} is escaped as
+\emph{{\textbackslash}{\textbackslash}}. 
+\item Null: \emph{null}
 \end{itemize}
-{\selectlanguage{english}\bfseries
-Operators }
 
-\foreignlanguage{english}{In addition to the
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{.}}\foreignlanguage{english}{
-and
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{[]}}\foreignlanguage{english}{
-operators discussed above in
-}\href{http://developers.sun.com/docs/jscreator/help/jsp-jsfel/jsf_expression_language_intro.html#getvaluesemantics}{Get
-Value Semantics}\foreignlanguage{english}{ and the section after that
-one, the expression language provides the following operators: }
+\section{\bfseries Operators }
 
-\liststyleWWNumxiv
+In addition to the \emph{.} and
+\emph{[]} operators discussed above in
+\href{http://developers.sun.com/docs/jscreator/help/jsp-jsfel/jsf_expression_language_intro.html#getvaluesemantics}{Get
+Value Semantics} and the section after that one, the expression
+language provides the following operators: 
+
 \begin{itemize}
-\item \foreignlanguage{english}{Arithmetic:
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{+}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{}-
-}}\foreignlanguage{english}{\textit{(binary)}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{*}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{/}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{div}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{\%}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{mod}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{}-}}\foreignlanguage{english}{
-}\foreignlanguage{english}{\textit{(unary)}}\foreignlanguage{english}{
-\newline
-}\textstylespv{\foreignlanguage{english}{~}}
-\item Logical: \textstyleHTMLTypewriter{and},
-\textstyleHTMLTypewriter{\&\&}, \textstyleHTMLTypewriter{or},
-\textstyleHTMLTypewriter{{\textbar}{\textbar}},
-\textstyleHTMLTypewriter{not}, \textstyleHTMLTypewriter{!} \newline
-\textstylespv{~}
-\item \foreignlanguage{english}{Relational:
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{==}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{eq}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{!=}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ne}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textless}}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{lt}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textgreater}}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{gt}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textless}=}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{ge}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{{\textgreater}=}}\foreignlanguage{english}{,
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{le}}\foreignlanguage{english}{.
-Comparisons can be made against other values, or against boolean,
-string, integer, or floating point literals. \newline
-}\textstylespv{\foreignlanguage{english}{~}}
-\item \foreignlanguage{english}{Empty: The
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{empty}}\foreignlanguage{english}{
-operator is a prefix operation that can be used to determine whether a
-value is
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{null}}\foreignlanguage{english}{
-or empty. \newline
-}\textstylespv{\foreignlanguage{english}{~}}
-\item \foreignlanguage{english}{Conditional:
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{A ? B :
-C}}\foreignlanguage{english}{. Evaluate
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{B}}\foreignlanguage{english}{
-or
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{C}}\foreignlanguage{english}{,
-depending on the result of the evaluation of
-}\textstyleHTMLTypewriter{\foreignlanguage{english}{A}}\foreignlanguage{english}{.
-}
+\item Arithmetic: \emph{+},
+\emph{{}- }\textit{(binary)},
+\emph{*}, \emph{/},
+\emph{div}, \emph{\%},
+\emph{mod}, \emph{{}-}
+\textit{(unary)} \newline
+\item Logical: \emph{and},
+\emph{\&\&}, \emph{or},
+\emph{{\textbar}{\textbar}},
+\emph{not}, \emph{!} \newline
+\item Relational: \emph{==},
+\emph{eq}, \emph{!=},
+\emph{ne}, \emph{{\textless}},
+\emph{lt}, \emph{{\textgreater}},
+\emph{gt}, \emph{{\textless}=},
+\emph{ge},
+\emph{{\textgreater}=},
+\emph{le}. Comparisons can be made against other
+values, or against boolean, string, integer, or floating point
+literals. \newline
+\item Empty: The \emph{empty} operator is a prefix
+operation that can be used to determine whether a value is
+\emph{null} or empty. \newline
+\item Conditional: \emph{A ? B : C}. Evaluate
+\emph{B} or \emph{C}, depending
+on the result of the evaluation of \emph{A}. 
 \end{itemize}
-\foreignlanguage{english}{The precedence of operators highest to lowest,
-left to right is as follows: }
+The precedence of operators highest to lowest, left to right is as
+follows: 
 
-\liststyleWWNumxix
 \begin{itemize}
-\item \textstyleHTMLTypewriter{[] .} 
-\item \textstyleHTMLTypewriter{()}~~\textit{(changes precedence of
+\item \emph{[] .} 
+\item \emph{()}~~\textit{(changes precedence of
 operators)} 
 
 \begin{itemize}
 \item \begin{itemize}
-\item \textit{(unary)}\textstyleHTMLTypewriter{ not ! empty} 
+\item \textit{(unary)}\emph{ not ! empty} 
 \end{itemize}
 \end{itemize}
-\item \textstyleHTMLTypewriter{/ div \% mod} 
-\item \textstyleHTMLTypewriter{+ - }\textit{(binary)} 
-\item \textstyleHTMLTypewriter{{\textless} {\textgreater} {\textless}=
+\item \emph{/ div \% mod} 
+\item \emph{+ - }\textit{(binary)} 
+\item \emph{{\textless} {\textgreater} {\textless}=
 {\textgreater}= lt gt le ge} 
-\item \textstyleHTMLTypewriter{== != eq ne} 
-\item \textstyleHTMLTypewriter{\&\& and} 
-\item \textstyleHTMLTypewriter{{\textbar}{\textbar} or} 
-\item \textstyleHTMLTypewriter{? :} \textstylespv{~}
+\item \emph{== != eq ne} 
+\item \emph{\&\& and} 
+\item \emph{{\textbar}{\textbar} or} 
+\item \emph{? :}
 \end{itemize}
+
+\section{\bfseries Reserved Words }
+
+The following words are reserved for the expression language and must
+not be used as identifiers:
+
+\begin{flushleft}
+\tablehead{\hline}
+\tablelasttail{\hline}
+\begin{supertabular}{|c|c|c|c|}
+\emph{and} & \emph{false} & \emph{le} & \emph{not} \\
+\emph{div} & \emph{ge} & \emph{lt} & \emph{null} \\
+\emph{empty} & \emph{gt} & \emph{mod} & \emph{or} \\
+\emph{eq} & \emph{instanceof} & \emph{ne} & \emph{true} \\
+\end{supertabular}
+\end{flushleft}
+
+\bigskip

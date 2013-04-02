@@ -19,14 +19,20 @@
 \selectlanguage{spanish}
 \usepackage[latin1]{inputenc}
 
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
 \usepackage{listings}
 \usepackage{courier}
 \usepackage{xcolor}
+\usepackage{framed}
 
 \usepackage{hyperref}
 \hypersetup{%
     pdfborder = {0 0 0}
 }
+
+\usepackage{supertabular}
 
 \definecolor{lightblue}{RGB}{213,241,250}
 \definecolor{javastrings}{rgb}{0.6,0,0} % for strings
@@ -81,9 +87,14 @@
 \renewcommand{\lstlistlistingname}{Índice de listados}
 
 \renewcommand{\rmdefault}{ptm}
-\textwidth 6.0in
-\parskip 0.25cm
+\textwidth 6.25in
+\textheight 9.75in
+%\parskip 0.25cm
 \parindent 0.0in
+\marginparwidth = 0pt
+\topmargin -0.3in
+\setlength{\oddsidemargin}{0in} 
+\setlength{\evensidemargin}{0in}
 
 \begin{document}
  

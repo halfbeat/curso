@@ -1,8 +1,673 @@
 \chapter{Teoría de vista: JSF 2}
 
-\section{Definiciones}
+\section{El ciclo de vida de una request}
+Una aplicaci\'on \emph{JSF} no es m\'as que una aplicaci\'on Web que
+utiliza un \emph{Servlet }denominado \emph{FacesServlet }el cual
+recibe las peticiones desde el browser del usuario a la aplicaci\'on.
+Por tanto la configuraci\'on de la aplicaci\'on se realiza en el
+fichero \emph{web.xml} de la forma habitual.
 
-\section{Configuraci\'{o}n de aplicaciones Web con tecnologíaa JSF 2}
+Una vez que una \emph{request} llega al \emph{servlet }esta pasa por
+una serie de fases cuya ejecuci\'on depende de la p\'agina se est\'a
+presentando por primera vez o estamos procesando un formulario.
+
+El siguiente diagrama muestra el ciclo de vida de una \emph{request}
+\emph{JSF}:
+
+
+{\centering 
+\includegraphics[width=11.795cm,height=6.535cm]{cap04/jsf-img1.png} \par}
+
+El ciclo de vida gestiona dos tipos de \emph{request}: las
+\emph{initial requests} y \emph{postbacks}. Cuando un usuario
+realiza una \emph{initial request} est\'a \ pidiendo la p\'agina por
+primera vez. Cuando el usuario ejecuta un \emph{postback}, se env\'ia
+el formulario contenido en la p\'agina que ha sido cargada previamente
+en el navegador como resultado de la ejecuci\'on de una \emph{initial
+request}. Cuando el ciclo de vida procesa una \emph{initial}
+\emph{request}, solamente se ejecutan las fases \emph{restore}
+\emph{view} y \emph{render} ya que no hay entrada de usuario o
+acciones que procesar. Cuando el ciclo de vida procesa una 
+\emph{postback} \emph{request} se ejecutan las siguientes fases: 
+
+{\centering \includegraphics[width=13.039cm,height=9.342cm]{cap04/jsf-img2.png} \par}
+
+\subsection*{Restore View Phase }
+Cuando se realiza una solicitud de una p\'agina \emph{JavaServer}
+\emph{Faces}, por ejemplo, cuando se pulsa un enlace o un bot\'on, la
+implementaci\'on \emph{JavaServer} \emph{Faces} comienza la fase de
+restauraci\'on de la vista.
+
+Durante esta fase, la implementaci\'on \emph{JavaServer}
+\emph{Faces} construye la vista de la p\'agina, los enlaces a los
+eventos, los validadores de los componentes de la vista, y guarda la
+vista en la instancia \emph{FacesContext}. La instancia
+\emph{FacesContext} contiene toda la informaci\'on necesaria para
+procesar una \'unica solicitud. Todas las etiquetas de los componentes
+de la aplicaci\'on, los controladores de eventos, conversores y
+validadores tienen acceso a la instancia \emph{FacesContext}. 
+ 
+Si la solicitud de la p\'agina es una \emph{initial request}, la
+implementaci\'on \emph{JavaServer} \emph{Faces} crea una vista
+vac\'ia durante esta etapa y avanza directamente el ciclo de vida hasta
+la etapa de \emph{render response}.
+
+Si la solicitud de la p\'agina es una \emph{postback}
+\emph{request}, durante esta fase, la implementaci\'on
+\emph{JavaServer} \emph{Faces} restaura la vista mediante el uso de
+la informaci\'on de estado guardada en el cliente o el servidor.
+
+\subsection*{Apply Request Values Phase }
+Despu\'es de restaurar \ el \'arbol de componentes, cada componente del
+\'arbol extrae su nuevo valor de los par\'ametros de la
+\emph{request} usando el m\'etodo \emph{decode}. El valor se
+almacena localmente en el componente. Si la conversi\'on del valor
+falla, se genera un mensaje de error asociado al componente y se encola
+en \emph{FacesContext}. Este mensaje se mostrar\'a durante la fase de
+\emph{response}, junto con los errores de validaci\'on resultantes de
+la fase de validaci\'on. 
+
+Si hay eventos han encolados durante esta fase, la implementaci\'on
+\emph{JavaServer} \emph{Faces} env\'ia los eventos a los
+componentes interesados. 
+
+Si algunos de los componentes de la p\'agina tiene el atributo
+\emph{inmediate} definido a \emph{true}, entonces la validaci\'on,
+la conversi\'on y los eventos asociados a estos componentes ser\'an
+procesados durante esta fase. 
+
+Al final de esta fase, los componentes se cargan con sus nuevos valores,
+y los mensajes y los acontecimientos han sido encolados.
+
+\subsection*{Process Validations Phase }
+Durante esta fase, la implementaci\'on \emph{JSF} procesa todas las
+validaciones registradas en el \'arbol de componentes, examina los
+atributos de los componentes que especifican las reglas de validaci\'on
+y compara esas reglas con los valores almacenados en el componente.
+
+Si el valor almacenado es inv\'alido, la implementaci\'on inserta un
+mensaje de error en la instancia \emph{FacesContext} y el ciclo de
+vida contin\'ua directamente hacia la fase de respuesta para que la
+p\'agina sea generada de nuevo con los mensajes de error. Si hubiera
+errores de conversi\'on generados en la fase anterior esos mensajes de
+error se mostrar\'ian tambi\'en en esta fase. Si se produjesen eventos
+en esta fase, la implementaci\'on los dirigir\'a hacia los componentes
+interesados. 
+
+\subsection*{Update Model Values Phase }
+Una vez que la implementaci\'on determina que los datos son correctos,
+recorrer\'a el \'arbol de componentes y establecer\'a (m\'etodo
+\emph{set}) el valor de la propiedad correspondiente \ en el objeto
+del servidor (\emph{bean}). Solo se actualizar\'an \ los atributos
+apuntados por componentes de entrada. Si el valor no puede ser
+convertido al tipo especificado por el atributo del \emph{bean}, el
+ciclo de vida avanza a la fase de respuesta por lo que los errores
+ser\'a mostrados con la respuesta. Lo mismo ocurre con los errores de
+validaci\'on. Si se produjesen eventos en esta fase, la
+implementaci\'on los dirigir\'a hacia los componentes interesados.
+
+\subsection*{Invoke Application Phase }
+Durante esta fase, la implementaci\'on \emph{JSF} maneja los eventos
+de nivel de aplicaci\'on, como el env\'io de un formulario o el enlace
+a otra p\'agina. 
+
+En esta fase se comprueban las reglas de navegaci\'on y la
+implementaci\'on \emph{JSF} transferir\'a el control a la fase de
+respuesta estableciendo la vista a la p\'agina actual o la nueva
+obtenida por navegaci\'on. 
+
+\subsection*{Render Response Phase }
+En esta fase la implementaci\'on \emph{JSF} delega la composici\'on de
+la p\'agina al contenedor JSP en el caso de que la aplicaci\'on utilice
+p\'aginas JSP \ (lo m\'as habitual). Si se trata de una
+\emph{initial} \emph{request} los componentes que representan la
+p\'agina \ ser\'an a\~nadidos al \'arbol de componentes sobre el que el
+contenedor JSP ejecuta la p\'agina. Si no es una \emph{initial}
+\emph{request}, los componentes ya se encuentran en el \'arbol por lo
+que no es necesario a\~nadirlos de nuevo. En cualquier caso los
+componentes se muestran a s\'i mismos durante el recorrido por el
+\'arbol que realizara el contenedor JSP leyendo los tags de la
+p\'agina.
+ 
+Si la \emph{request} es de tipo \emph{postback} y se detectan
+errores resultantes de la ejecuci\'on de cualquiera de las fases
+anteriores, la p\'agina original es enviada al browser. Si en dicha
+p\'agina apareciesen componentes
+\emph{{\textless}h:message/{\textgreater}} o
+\emph{{\textless}h:messages{\textgreater},} los mensajes de error se
+mostrar\'ian en la p\'agina.
+
+Antes de que la vista sea generada, el estado de la respuesta se
+almacena para que las siguientes \emph{request}s lo tengan disponible
+en la fase de respuesta.
+
+\section{Configuración de aplicaciones Web con tecnología JSF 2}
+
+Para configurar un proyecto en \textit{JSF} necesitamos una serie de
+cosas en nuestro proyecto J2EE:
+
+\begin{itemize}
+\item Implementaci\'on \textit{JSF}
+\item Fichero \textit{web.xml} configurado para la implementaci\'on
+\textit{JSF} que vamos a utilizar
+\item Fichero \textit{faces-config.xml}
+\end{itemize}
+\subsection[Implementaci\'on JSF]{Implementaci\'on \textit{JSF}}
+Existen varias implementaciones \textit{JSF} de la especificaci\'on. Las
+versiones m\'as utilizadas son: 
+
+\textbf{sun-ri}\ \ \ \ Implementaci\'on de Sun
+
+\textbf{myfaces}\ \ Implementaci\'on de myfaces
+
+Para las pr\'acticas de este curso utilizaremos la implementaci\'on de
+Sun.
+
+\subsection[Fichero web.xml]{Fichero \textit{web.xml}}
+El fichero \textit{web.xml} debe de ser modificado para utilizar el
+\textit{servlet }que ofrece la implementaci\'on de \textit{JSF}. Las
+entradas m\'inimas son las siguientes
+
+
+\bigskip
+\begin{framed}
+\lstset{language=XML}
+\begin{lstlisting}
+<context-param>
+	<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+	<param-value>xhtml</param-value>
+  </context-param>
+<servlet>
+	<servlet-name>Faces Servlet</servlet-name>
+	<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+	<servlet-name>Faces Servlet</servlet-name>
+	<url-pattern>*.faces</url-pattern>
+</servlet-mapping>
+\end{lstlisting}
+\end{framed} 
+
+\bigskip
+
+\begin{framed}
+Con este ejemplo decimos a nuestro servidor que todas las peticiones
+cuya URL acabe en .\textit{faces} se procesen por el Servet
+FacesServlet.
+
+Adem\'as decimos que la extensi\'on de nuestras p\'aginas web ser\'a
+xhtml. Podr\'iamos no utilizar xhtml simplemente no declarando este
+context-param, y utilizar jsp, pero todo este curso se basa en la
+utilizaci\'on de p\'aginas XHTML por las ventajas que aporta.
+\end{framed}
+
+
+\bigskip
+
+{\itshape
+Utilizar xhtml implica que nuestras p\'aginas web estar\'an escritas en
+XHTML. A partir de ahora ser\'an de hecho ficheros xml que ser\'an
+procesados de forma estricta por el servidor. Una p\'agina xhtml tiene
+el siguiente aspecto:}
+
+
+\bigskip
+
+\lstset{language=XML}
+\begin{lstlisting}
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<body>
+	</body>
+</html>
+\end{lstlisting} 
+
+{\itshape
+{\textless}?\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{xml}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{version}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{1.0}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{encoding}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{ISO-8859-1}
+?{\textgreater}}
+
+{\itshape
+\textcolor{black}{{\textless}!DOCTYPE html PUBLIC
+-//W3C//DTD XHTML 1.0 Transitional//EN }}
+
+{\itshape
+\textcolor{black}{\ \ \ \ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd{\textgreater}}}
+
+{\itshape
+{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{html}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{xmlns}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{http://www.w3.org/1999/xhtml{\textquotedblright}{\textgreater}}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{body}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{body}{\textgreater}}
+
+{\itshape
+{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{html}{\textgreater}}
+
+\bigskip
+
+{\itshape
+Utilizaremos los namespaces del fichero xhtml (xml) para acceder a los
+diferentes tags que necesitar\'an las p\'aginas (tags de JSF,
+richfaces, ajax, facelets, ..). Todo esto se ver\'a m\'as adelante.}
+
+
+\bigskip
+
+Vamos a ver una pr\'actica para familiarizarnos con un proyecto JSF
+b\'asico.
+
+
+\bigskip
+
+{\raggedleft\bfseries\itshape
+Pr\'actica 1: Hola Mundo
+\par}
+
+{\itshape
+Crear un proyecto con la configuraci\'on m\'inima y una pantalla de
+inicio que presente el texto {\textquotedblleft}Hola
+mundo{\textquotedblright}.}
+
+{\raggedleft\bfseries\itshape
+Soluci\'on
+\par}
+
+{\itshape
+La soluci\'on implica crear la siguiente estructura de proyecto:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=4.784cm,height=4.443cm]{cap04/jsf-imga1.png} \par}
+
+
+\bigskip
+
+{\itshape
+\textbf{Fichero web.xml:}}
+
+{\itshape
+{\textless}?\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{xml}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{version}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{1.0}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{encoding}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{UTF-8}?{\textgreater}}
+
+{\itshape
+{\textless}!\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{DOCTYPE}
+web-app \textcolor[rgb]{0.5019608,0.5019608,0.5019608}{PUBLIC}
+-//Sun Microsystems, Inc.//DTD Web Application
+2.3//EN
+\textcolor[rgb]{0.24705882,0.49803922,0.37254903}{http://java.sun.com/dtd/web-app\_2\_3.dtd}{\textgreater}}
+
+{\itshape
+{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{web-app}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{id}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{WebApp\_ID}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{context-param}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{param-name}{\textgreater}\textcolor{black}{javax.Faces.DEFAULT\_SUFFIX}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{param-name}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{param-value}{\textgreater}\textcolor{black}{.jspx}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{param-value}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{context-param}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-name}{\textgreater}\textcolor{black}{Faces
+}\textcolor{black}{Servlet}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-name}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-class}{\textgreater}\textcolor{black}{javax.Faces.webapp.FacesServlet}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-class}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{load-on-startup}{\textgreater}\textcolor{black}{1}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{load-on-startup}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-mapping}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-name}{\textgreater}\textcolor{black}{Faces
+}\textcolor{black}{Servlet}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-name}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{url-pattern}{\textgreater}\textcolor{black}{*.Faces}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{url-pattern}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{servlet-mapping}{\textgreater}}
+
+{\itshape
+{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{web-app}{\textgreater}}
+
+
+\bigskip
+
+{\itshape
+\textbf{Fichero faces-config.xml:}}
+
+{\itshape
+{\textless}?\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{xml}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{version}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{1.0}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{encoding}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{UTF-8}?{\textgreater}}
+
+{\itshape
+{\textless}!\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{DOCTYPE}
+faces-config \textcolor[rgb]{0.5019608,0.5019608,0.5019608}{PUBLIC}}
+
+{\itshape
+\ \ \ \ -//Sun Microsystems, Inc.//DTD JavaServer Faces
+Config 1.1//EN}
+
+{\itshape
+\ \ \ \ \textcolor[rgb]{0.24705882,0.49803922,0.37254903}{http://java.sun.com/dtd/web-facesconfig\_1\_1.dtd}{\textgreater}}
+
+{\itshape
+{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{faces-config}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{application}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{view-handler}{\textgreater}\textcolor{black}{com.sun.facelets.FaceletViewHandler}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{view-handler}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{application}{\textgreater}}
+
+{\itshape
+{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{faces-config}{\textgreater}}
+
+
+\bigskip
+
+{\itshape
+\textbf{Fichero index.jspx:}}
+
+{\itshape
+{\textless}?\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{xml}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{version}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{1.0}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{encoding}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{ISO-8859-1}
+?{\textgreater}}
+
+{\itshape
+{\textless}!\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{DOCTYPE}
+html \textcolor[rgb]{0.5019608,0.5019608,0.5019608}{PUBLIC}
+-//W3C//DTD XHTML 1.0 Transitional//EN }
+
+{\itshape
+\ \ \ \ \textcolor[rgb]{0.24705882,0.49803922,0.37254903}{http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd}{\textgreater}}
+
+{\itshape
+{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{html}
+\textcolor[rgb]{0.49803922,0.0,0.49803922}{xmlns}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{http://www.w3.org/1999/xhtml}}
+
+{\itshape
+\ \ \textcolor[rgb]{0.49803922,0.0,0.49803922}{xmlns:h}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{http://java.sun.com/JSF/html}}
+
+{\itshape
+\ \ \textcolor[rgb]{0.49803922,0.0,0.49803922}{xmlns:f}\textcolor{black}{=}\textcolor[rgb]{0.16470589,0.0,1.0}{http://java.sun.com/JSF/core}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{body}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ \ \ }{\textless}\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{h1}{\textgreater}\textcolor{black}{Hola}\textcolor{black}{
+}\textcolor{black}{mundo}{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{h1}{\textgreater}}
+
+{\itshape
+\textcolor{black}{\ \ }{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{body}{\textgreater}}
+
+{\itshape
+{\textless}/\textcolor[rgb]{0.24705882,0.49803922,0.49803922}{html}{\textgreater}}
+
+
+\bigskip
+
+{\itshape
+Como esta es la primera pr\'actica vamos a ver paso a paso como crear el
+proyecto en eclipse:}
+
+
+\bigskip
+
+{\raggedleft\bfseries\itshape
+Paso 1: Crear el proyecto
+\par}
+
+{\itshape
+Los ficheros del curso estar\'an ubicados en la carpeta
+C:{\textbackslash}CURSO}
+
+{\itshape
+En dicha carpeta existir\'a otra carpeta de nombre
+C:{\textbackslash}CURSO{\textbackslash}PRACTICAS{\textbackslash}JSF}
+
+{\itshape
+Y otra con el nombre
+C:{\textbackslash}CURSO{\textbackslash}PRACTICAS{\textbackslash}eclipse}
+
+{\itshape
+Abrimos el eclipse
+(C:{\textbackslash}CURSO{\textbackslash}SOFTWARE{\textbackslash}eclipse)
+y obtendremos una ventana similar a esta:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=11.128cm,height=6.645cm]{cap04/jsf-imga2.png} \par}
+
+{\itshape
+Seleccionamos File [F0E0?] \ New [F0E0?]Dynamic Web Project. Nos
+presentar\'a \ una ventana que dejaremos de la siguiente forma:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=7.913cm,height=9.356cm]{cap04/jsf-imga3.png} \par}
+
+
+\bigskip
+
+{\itshape
+Observar que se ha cambiado la ubicaci\'on del proyecto a
+C:{\textbackslash}CURSO{\textbackslash}PRACTICAS{\textbackslash}JSF }
+
+{\itshape
+Pulsamos siguiente y obtenemos:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=7.992cm,height=9.451cm]{cap04/jsf-imga4.png} \par}
+
+
+\bigskip
+
+{\itshape
+Pulsamos siguiente y lo dejamos como en la siguiente imagen:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=9.999cm,height=5.459cm]{cap04/jsf-imga5.png} \par}
+
+
+\bigskip
+
+{\itshape
+Pulsamos finalizar y terminamos con la creaci\'on del proyecto que
+quedar\'a:}
+
+
+\bigskip
+
+{\centering  \includegraphics[width=12.3cm,height=6.267cm]{cap04/jsf-imga6.png}
+\par}
+
+
+\bigskip
+
+{\itshape
+Necesitamos a\~nadir las librer\'ias al proyecto. Tenemos dos opciones:
+}
+
+\begin{itemize}
+\item {\itshape
+configurar un library path }
+\item {\itshape
+copiar los jars \ al directorio WEB-INF/lib.}
+\end{itemize}
+{\itshape
+\ Vamos a utilizar la segunda opci\'on por su simplicidad. Copiamos el
+contenido (no la carpeta, solo los jars) de la carpeta
+C:{\textbackslash}CURSO{\textbackslash}PRACTICAS{\textbackslash}libs{\textbackslash}JSF-libs
+a
+C:{\textbackslash}CURSO{\textbackslash}PRACTICAS{\textbackslash}JSF{\textbackslash}PracticaJSF1{\textbackslash}web{\textbackslash}WEB-INF{\textbackslash}lib
+y en el proyecto seleccionamos dicha carpeta y pulsamos F5 para que
+actualice el contenido. Veremos lo siguiente:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=9.999cm,height=9.109cm]{cap04/jsf-imga7.png} \par}
+
+
+\bigskip
+
+{\itshape
+Para este proyecto no necesitamos todas las librer\'ias pero las
+utilizaremos en los siguientes.}
+
+{\raggedleft\bfseries\itshape
+Paso 2: Realizaci\'on de la pr\'actica.
+\par}
+
+{\itshape
+Modificamos el fichero web.xml como se ha explicado antes.}
+
+{\itshape
+Vamos a crear el fichero faces-config.xml. Seleccionamos la carpeta
+WEB-INF en el \'arbol seleccionamos File[F0E0?]New[F0E0?]File}
+
+{\itshape
+Dejamos la ventana de esta forma:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=7.689cm,height=8.841cm]{cap04/jsf-imga8.png} \par}
+
+
+\bigskip
+
+{\itshape
+Y pulsamos Finalizar. Hacemos doble click sobre el fichero reci\'en
+creado y lo dejamos como se ha explicado anteriormente.}
+
+{\itshape
+Ahora solo nos falta crear el fichero index.html. Realizamos el mismo
+proceso pero sobre la carpeta web. El proyecto deber\'ia tener el
+siguiente aspecto:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=9.537cm,height=7.811cm]{cap04/jsf-imga9.png} \par}
+
+{\raggedleft\bfseries\itshape
+Paso 3: Ejecuci\'on del proyecto
+\par}
+
+{\itshape
+Para ello necesitamos configurar un servidor. Esto solo se hace la
+primera vez.}
+
+{\itshape
+Vamos a utilizar un servidor Tomcat para ejecutar nuestras pr\'acticas.
+Hacemos lo siguiente:}
+
+{\itshape
+Seleccionamos la opci\'on New[F0E0?]Server con el bot\'on derecho del
+rat\'on en la pesta\~na Servers}
+
+{\itshape
+En la nueva ventana seleccionamos Tomcat 6:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=7.992cm,height=8.407cm]{cap04/jsf-imga10.png} \par}
+
+
+\bigskip
+
+{\itshape
+Pulsamos siguiente y seleccionamos la ruta al Tomcat
+(C:{\textbackslash}CURSO{\textbackslash}SOFTWARE{\textbackslash}apache-tomcat-6.0.29.}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=8.805cm,height=9.239cm]{cap04/jsf-imga11.png} \par}
+
+
+\bigskip
+
+{\itshape
+Pulsamos siguiente y a\~nadimos nuestro proyecto al servidor:}
+
+
+\bigskip
+
+{\centering 
+\includegraphics[width=9.999cm,height=10.516cm]{cap04/jsf-imga12.png} \par}
+
+
+\bigskip
+
+{\itshape
+Pulsamos finalizar. En la pesta\~na Servers aparecer\'a el nuevo
+servidor con nuestro proyecto. Pulsamos con el bot\'on derecho del
+rat\'on y seleccionamos Run. Accediendo con un navegador obtendremos lo
+siguiente:}
+
+
+\bigskip
+
+{\centering\itshape
+ \includegraphics[width=9.999cm,height=6.616cm]{cap04/jsf-imga13.png} \textup{
+}
+\par}
+
+
+\bigskip
+
+
+\bigskip
 
 \section{Beans gestionados}
 
@@ -15,7 +680,7 @@
 \section{Navegación}
 
 \section{Conversión}
-
+ 
 \section{Validación}
 
 \section{Gestión de errores}

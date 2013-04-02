@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "T_EMPLEADO")
+@Table(name = "T_EMPLEADOS")
 @SequenceGenerator(name = "SEQ_EMPLEADOS", initialValue = 1, allocationSize = 1)
 public class Empleado implements Serializable {
 
